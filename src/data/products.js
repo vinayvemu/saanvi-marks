@@ -12,6 +12,8 @@ export const categories = [
 export const products = [
   {
     id: 'p001',
+    order: 1,
+    active: true,
     name: 'Prestige Metal Pen',
     category: 'pens',
     price: 349,
@@ -19,7 +21,10 @@ export const products = [
     material: 'Stainless Steel',
     engravingArea: '60mm × 8mm',
     tags: ['corporate', 'gifting', 'bestseller'],
-    images: ['/images/pen-silver.jpg'],
+    images:      ['/pen-silver.png'],
+    plainImages: ['/pen-silver-plain.png'],   // drop plain version here when ready
+    // Where the engraving overlay renders on the product image
+    previewZone: { top: '54%', left: '50%', width: '55%', textAlign: 'center', maxFontSize: 15 },
     description: 'Hand-finished stainless steel pen with precision laser engraving. Perfect for corporate gifting, anniversaries, and milestones.',
     engravingOptions: {
       text: { maxChars: 30, lines: 2, fonts: ['Classic Serif', 'Modern Sans', 'Script', 'Block'] },
@@ -37,6 +42,8 @@ export const products = [
   },
   {
     id: 'p002',
+    order: 2,
+    active: true,
     name: 'Signature Keychain',
     category: 'keychains',
     price: 199,
@@ -44,7 +51,9 @@ export const products = [
     material: 'Brass / Stainless Steel',
     engravingArea: '45mm × 25mm',
     tags: ['wedding', 'return gift', 'temple'],
-    images: ['/images/keychain-brass.jpg'],
+    images:      ['/keychain-brass.png'],
+    plainImages: ['/keychain-brass-plain.png'],
+    previewZone: { top: '46%', left: '50%', width: '38%', textAlign: 'center', maxFontSize: 13 },
     description: 'Premium brass keychain with deep laser engraving. A timeless keepsake for weddings, festivals, and corporate events.',
     engravingOptions: {
       text:  { maxChars: 20, lines: 2, fonts: ['Classic Serif', 'Modern Sans', 'Script', 'Telugu'] },
@@ -62,6 +71,8 @@ export const products = [
   },
   {
     id: 'p003',
+    order: 3,
+    active: true,
     name: 'Elite Vacuum Tumbler',
     category: 'bottles',
     price: 799,
@@ -69,7 +80,9 @@ export const products = [
     material: 'Double-wall Stainless Steel',
     engravingArea: 'Wrap-around 200mm × 60mm',
     tags: ['corporate', 'premium', 'diwali'],
-    images: ['/images/tumbler-black.jpg'],
+    images:      ['/tumbler-black.png'],
+    plainImages: ['/tumbler-black-plain.png'],
+    previewZone: { top: '48%', left: '50%', width: '52%', textAlign: 'center', maxFontSize: 14 },
     description: 'Executive-grade vacuum-insulated tumbler with 360° laser engraving capability. The centrepiece of any premium gift box.',
     engravingOptions: {
       text:  { maxChars: 50, lines: 3, fonts: ['Classic Serif', 'Modern Sans', 'Script', 'Block', 'Telugu'] },
@@ -87,6 +100,8 @@ export const products = [
   },
   {
     id: 'p004',
+    order: 4,
+    active: true,
     name: 'Heritage Photo Plaque',
     category: 'frames',
     price: 899,
@@ -94,7 +109,9 @@ export const products = [
     material: 'Teak Wood / Pine',
     engravingArea: '180mm × 130mm',
     tags: ['wedding', 'anniversary', 'photo'],
-    images: ['/images/plaque-wood.jpg'],
+    images:      ['/plaque-wood.jpeg'],
+    plainImages: ['/plaque-wood-plain.jpeg'],
+    previewZone: { top: '74%', left: '50%', width: '62%', textAlign: 'center', maxFontSize: 13 },
     description: 'Photo burned into premium teak wood with millimetre precision. Every detail of your memory preserved forever.',
     engravingOptions: {
       text:  { maxChars: 60, lines: 3, fonts: ['Classic Serif', 'Script'] },
@@ -108,6 +125,8 @@ export const products = [
   },
   {
     id: 'p005',
+    order: 5,
+    active: true,
     name: 'Venkateswara Devotional Keychain',
     category: 'devotional',
     price: 249,
@@ -115,7 +134,9 @@ export const products = [
     material: 'Brass',
     engravingArea: '40mm × 40mm',
     tags: ['temple', 'tirupati', 'devotional'],
-    images: ['/images/keychain-devotional.jpg'],
+    images:      ['/keychain-devotional.jpeg'],
+    plainImages: ['/keychain-devotional-plain.jpeg'],
+    previewZone: { top: '70%', left: '50%', width: '36%', textAlign: 'center', maxFontSize: 12 },
     description: 'Blessed brass keychain with Lord Venkateswara engraving. Add your family name in Telugu or English for a treasured darshan memento.',
     engravingOptions: {
       text:  { maxChars: 20, lines: 2, fonts: ['Telugu', 'Classic Serif', 'Script'] },
@@ -132,6 +153,8 @@ export const products = [
   },
   {
     id: 'p006',
+    order: 6,
+    active: true,
     name: 'Executive Award Plaque',
     category: 'corporate',
     price: 1299,
@@ -139,7 +162,9 @@ export const products = [
     material: 'Acrylic / MDF',
     engravingArea: '220mm × 160mm',
     tags: ['corporate', 'award', 'recognition'],
-    images: ['/images/award-plaque.jpg'],
+    images:      ['/award-plaque.jpeg'],
+    plainImages: ['/award-plaque-plain.jpeg'],
+    previewZone: { top: '44%', left: '50%', width: '58%', textAlign: 'center', maxFontSize: 14 },
     description: 'Premium recognition award with deep laser engraving. Elevate employee appreciation with a piece that commands a desk.',
     engravingOptions: {
       text:  { maxChars: 120, lines: 5, fonts: ['Classic Serif', 'Modern Sans', 'Block'] },
@@ -156,6 +181,8 @@ export const products = [
   },
   {
     id: 'p007',
+    order: 7,
+    active: true,
     name: 'Wedding Return Gift Set',
     category: 'wedding',
     price: 599,
@@ -163,7 +190,9 @@ export const products = [
     material: 'Mixed — Brass + Wood',
     engravingArea: 'Keychain 45mm + Coaster 90mm',
     tags: ['wedding', 'return gift', 'bulk'],
-    images: ['/images/wedding-set.jpg'],
+    images:      ['/wedding-set.jpeg'],
+    plainImages: ['/wedding-set-plain.jpeg'],
+    previewZone: { top: '44%', left: '35%', width: '28%', textAlign: 'center', maxFontSize: 12 },
     description: 'Curated keychain + coaster combo engraved with couple names and wedding date. Minimum 50 sets. Free design approval proof.',
     engravingOptions: {
       text:  { maxChars: 40, lines: 2, fonts: ['Classic Serif', 'Script', 'Telugu'] },
@@ -181,6 +210,8 @@ export const products = [
   },
   {
     id: 'p008',
+    order: 8,
+    active: true,
     name: 'Car Number Keychain',
     category: 'keychains',
     price: 179,
@@ -188,7 +219,9 @@ export const products = [
     material: 'Stainless Steel',
     engravingArea: '60mm × 20mm',
     tags: ['trending', 'gifting'],
-    images: ['/images/keychain-car.jpg'],
+    images:      ['/keychain-car.png'],
+    plainImages: ['/keychain-car-plain.png'],
+    previewZone: { top: '50%', left: '50%', width: '48%', textAlign: 'center', maxFontSize: 16 },
     description: 'Your vehicle registration number engraved in bold on premium stainless steel. A viral gifting trend — personalised, practical, and lasting.',
     engravingOptions: {
       text:  { maxChars: 12, lines: 1, fonts: ['Block', 'Modern Sans', 'Classic Serif'] },
@@ -236,9 +269,15 @@ export const testimonials = [
 ]
 
 export const fontOptions = [
-  { id: 'classic-serif', label: 'Classic Serif',  style: { fontFamily: 'Playfair Display, serif', fontWeight: 500 } },
-  { id: 'modern-sans',   label: 'Modern Sans',    style: { fontFamily: 'Inter, sans-serif',        fontWeight: 400, letterSpacing: '0.05em' } },
-  { id: 'script',        label: 'Elegant Script', style: { fontFamily: 'Dancing Script, cursive',  fontWeight: 600 } },
-  { id: 'block',         label: 'Bold Block',     style: { fontFamily: 'Inter, sans-serif',         fontWeight: 700, letterSpacing: '0.08em' } },
-  { id: 'telugu',        label: 'Telugu',         style: { fontFamily: 'Noto Sans Telugu, sans-serif' } },
+  { id: 'caveat',              label: 'Caveat',              google: 'Caveat:wght@600',               style: { fontFamily: '"Caveat", cursive',               fontWeight: 600 } },
+  { id: 'pacifico',            label: 'Pacifico',            google: 'Pacifico',                      style: { fontFamily: '"Pacifico", cursive' } },
+  { id: 'josefin-sans',        label: 'Josefin Sans',        google: 'Josefin+Sans:wght@600',         style: { fontFamily: '"Josefin Sans", sans-serif',      fontWeight: 600, letterSpacing: '0.1em' } },
+  { id: 'yellowtail',          label: 'Yellowtail',          google: 'Yellowtail',                    style: { fontFamily: '"Yellowtail", cursive' } },
+  { id: 'monoton',             label: 'Monoton',             google: 'Monoton',                       style: { fontFamily: '"Monoton", cursive' } },
+  { id: 'chango',              label: 'Chango',              google: 'Chango',                        style: { fontFamily: '"Chango", cursive' } },
+  { id: 'architects-daughter', label: 'Architects Daughter', google: 'Architects+Daughter',           style: { fontFamily: '"Architects Daughter", cursive' } },
+  { id: 'marck-script',        label: 'Marck Script',        google: 'Marck+Script',                  style: { fontFamily: '"Marck Script", cursive' } },
+  { id: 'allura',              label: 'Allura',              google: 'Allura',                        style: { fontFamily: '"Allura", cursive' } },
+  { id: 'amarante',            label: 'Amarante',            google: 'Amarante',                      style: { fontFamily: '"Amarante", cursive' } },
+  { id: 'telugu',              label: 'Telugu Script',       google: 'Noto+Sans+Telugu:wght@400',     style: { fontFamily: '"Noto Sans Telugu", sans-serif' } },
 ]

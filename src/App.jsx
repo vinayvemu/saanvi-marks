@@ -1,13 +1,21 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { CartProvider } from './context/CartContext'
-import Navbar      from './components/layout/Navbar'
-import Footer      from './components/layout/Footer'
-import CartDrawer  from './components/layout/CartDrawer'
-import HomePage    from './components/home/HomePage'
-import ProductsPage   from './pages/ProductsPage'
-import ProductPage    from './pages/ProductPage'
-import CheckoutPage   from './pages/CheckoutPage'
-import OrderSuccessPage from './pages/OrderSuccessPage'
+import { AuthProvider }    from './context/AuthContext'
+import { CartProvider }    from './context/CartContext'
+import Navbar              from './components/layout/Navbar'
+import Footer              from './components/layout/Footer'
+import CartDrawer          from './components/layout/CartDrawer'
+import ProtectedRoute      from './components/layout/ProtectedRoute'
+import HomePage            from './components/home/HomePage'
+import ProductsPage        from './pages/ProductsPage'
+import ProductPage         from './pages/ProductPage'
+import CheckoutPage        from './pages/CheckoutPage'
+import OrderSuccessPage    from './pages/OrderSuccessPage'
+import AuthPage            from './pages/AuthPage'
+import AccountPage         from './pages/AccountPage'
+import AdminProductsPage   from './pages/admin/AdminProductsPage'
+import CorporatePage       from './pages/CorporatePage'
+import WeddingPage         from './pages/WeddingPage'
+import WalkInPage          from './pages/WalkInPage'
 
 function Layout({ children }) {
   return (
@@ -36,22 +44,34 @@ function ComingSoon({ title }) {
 export default function App() {
   return (
     <BrowserRouter>
-      <CartProvider>
-        <Layout>
-          <Routes>
-            <Route path="/"               element={<HomePage />} />
-            <Route path="/products"       element={<ProductsPage />} />
-            <Route path="/products/:id"   element={<ProductPage />} />
-            <Route path="/checkout"       element={<CheckoutPage />} />
-            <Route path="/order-success"  element={<OrderSuccessPage />} />
-            <Route path="/corporate"  element={<ComingSoon title="Corporate Gifting" />} />
-            <Route path="/wedding"    element={<ComingSoon title="Wedding & Events" />} />
-            <Route path="/about"      element={<ComingSoon title="Our Story" />} />
-            <Route path="/contact"    element={<ComingSoon title="Contact Us" />} />
-            <Route path="*"           element={<ComingSoon title="Page Not Found" />} />
-          </Routes>
-        </Layout>
-      </CartProvider>
+      <AuthProvider>
+        <CartProvider>
+          <Layout>
+            <Routes>
+              <Route path="/"              element={<HomePage />} />
+              <Route path="/products"      element={<ProductsPage />} />
+              <Route path="/products/:id"  element={<ProductPage />} />
+              <Route path="/auth"          element={<AuthPage />} />
+              <Route path="/order-success" element={<OrderSuccessPage />} />
+              <Route path="/checkout" element={
+                <ProtectedRoute><CheckoutPage /></ProtectedRoute>
+              } />
+              <Route path="/account" element={
+                <ProtectedRoute><AccountPage /></ProtectedRoute>
+              } />
+              <Route path="/admin/products" element={
+                <ProtectedRoute><AdminProductsPage /></ProtectedRoute>
+              } />
+              <Route path="/corporate" element={<CorporatePage />} />
+              <Route path="/wedding"   element={<WeddingPage />} />
+              <Route path="/walk-in"   element={<WalkInPage />} />
+              <Route path="/about"     element={<ComingSoon title="Our Story" />} />
+              <Route path="/contact"   element={<ComingSoon title="Contact Us" />} />
+              <Route path="*"          element={<ComingSoon title="Page Not Found" />} />
+            </Routes>
+          </Layout>
+        </CartProvider>
+      </AuthProvider>
     </BrowserRouter>
   )
 }

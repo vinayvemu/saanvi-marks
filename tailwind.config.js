@@ -20,10 +20,10 @@ export default {
           50:  '#f5f5f4',
           100: '#e8e6e3',
           200: '#d0cdc8',
-          300: '#b0aba3',
-          400: '#8a847a',
-          500: '#6e6860',
-          600: '#575249',
+          300: '#c8c3bc',
+          400: '#b0aba3',   /* was #8a847a — bumped for dark-bg legibility */
+          500: '#8a847a',   /* was #6e6860 */
+          600: '#6e6860',   /* was #575249 */
           700: '#46423b',
           800: '#3a3731',
           900: '#1a1917',
@@ -32,9 +32,11 @@ export default {
         cream: '#faf8f3',
       },
       fontFamily: {
-        serif:  ['"Playfair Display"', 'Georgia', 'serif'],
-        sans:   ['"Inter"', 'system-ui', 'sans-serif'],
-        mono:   ['"JetBrains Mono"', 'monospace'],
+        serif:   ['"Comfortaa"', 'cursive'],
+        display: ['"Comfortaa"', 'cursive'],
+        script:  ['"Caveat"', 'cursive'],
+        sans:    ['"Nunito"', 'system-ui', 'sans-serif'],
+        mono:    ['"JetBrains Mono"', 'monospace'],
       },
       letterSpacing: {
         luxury: '0.2em',

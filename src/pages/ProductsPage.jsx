@@ -1,13 +1,31 @@
 import { useState, useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { SlidersHorizontal, X } from 'lucide-react'
-import { products, categories } from '../data/products'
+import { categories } from '../data/products'
+import { useProducts } from '../hooks/useProducts'
 import ProductCard from '../components/product/ProductCard'
+import SEO from '../components/ui/SEO'
+
+function ProductSkeleton() {
+  return (
+    <div className="animate-pulse" style={{ border: '1px solid rgba(70,66,59,0.3)', borderRadius: '4px' }}>
+      <div className="aspect-[4/3]" style={{ background: 'rgba(20,18,16,0.8)' }} />
+      <div className="p-5 space-y-3">
+        <div className="h-2 w-16 rounded" style={{ background: 'rgba(201,139,10,0.15)' }} />
+        <div className="h-4 w-3/4 rounded" style={{ background: 'rgba(70,66,59,0.4)' }} />
+        <div className="h-3 w-full rounded" style={{ background: 'rgba(70,66,59,0.25)' }} />
+        <div className="h-6 w-1/3 rounded" style={{ background: 'rgba(201,139,10,0.2)' }} />
+      </div>
+    </div>
+  )
+}
 
 export default function ProductsPage() {
   const [searchParams, setSearchParams] = useSearchParams()
-  const [sort, setSort] = useState('featured')
-  const catParam = searchParams.get('category') || 'all'
+  const [sort, setSort]                 = useState('featured')
+  const catParam                        = searchParams.get('category') || 'all'
+
+  const { products, loading } = useProducts({ activeOnly: true })
 
   const filtered = useMemo(() => {
     let list = catParam === 'all' ? products : products.filter(p => p.category === catParam)
@@ -15,7 +33,7 @@ export default function ProductsPage() {
     if (sort === 'price-desc') list = [...list].sort((a,b) => b.price - a.price)
     if (sort === 'featured')   list = [...list].sort((a,b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0))
     return list
-  }, [catParam, sort])
+  }, [products, catParam, sort])
 
   const setCategory = (cat) => {
     if (cat === 'all') searchParams.delete('category')
@@ -23,7 +41,22 @@ export default function ProductsPage() {
     setSearchParams(searchParams)
   }
 
+  const activeCat = categories.find(c => c.id === catParam)
+  const pageTitle = activeCat && catParam !== 'all'
+    ? `${activeCat.label} — Laser Engraved Gifts`
+    : 'Full Collection — Laser Engraved Gifts'
+  const pageDesc  = activeCat && catParam !== 'all'
+    ? `Shop personalised laser engraved ${activeCat.label.toLowerCase()} in Tirupati. Corporate gifting, weddings, and individual orders. Ships pan-India.`
+    : 'Browse our full collection of precision laser engraved pens, keychains, bottles, plaques and devotional gifts. Made to order in Tirupati, ships pan-India.'
+
   return (
+    <>
+    <SEO
+      title={pageTitle}
+      description={pageDesc}
+      keywords="laser engraved gifts online India, personalized keychains Tirupati, engraved tumblers corporate, photo plaque wood engraving, devotional keychain Tirupati"
+      url={`https://saanvimarks.in/products${catParam !== 'all' ? `?category=${catParam}` : ''}`}
+    />
     <main className="min-h-screen bg-onyx-950 pt-28 pb-20">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
 
@@ -72,10 +105,16 @@ export default function ProductsPage() {
         </div>
 
         {/* Count */}
-        <p className="text-xs text-onyx-500 mb-6">{filtered.length} products</p>
+        {!loading && (
+          <p className="text-xs text-onyx-500 mb-6">{filtered.length} products</p>
+        )}
 
         {/* Grid */}
-        {filtered.length === 0 ? (
+        {loading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {Array.from({ length: 8 }).map((_, i) => <ProductSkeleton key={i} />)}
+          </div>
+        ) : filtered.length === 0 ? (
           <div className="text-center py-24">
             <p className="font-serif text-xl text-onyx-400">No products in this category yet</p>
             <button onClick={() => setCategory('all')} className="btn-outline mt-6 inline-flex items-center gap-2">
@@ -89,5 +128,6 @@ export default function ProductsPage() {
         )}
       </div>
     </main>
+    </>
   )
 }

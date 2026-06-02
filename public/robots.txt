@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# Private / transactional — keep out of index
+Disallow: /checkout
+Disallow: /account
+Disallow: /order-success
+Disallow: /auth
+
+Sitemap: https://saanvimarks.in/sitemap.xml

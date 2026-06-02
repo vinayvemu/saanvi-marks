@@ -1,12 +1,30 @@
 import { initializeApp } from 'firebase/app'
-import { getFirestore } from 'firebase/firestore'
+import { getFirestore } from 'firebase/firestore/lite'
 import { getAuth } from 'firebase/auth'
 import { getStorage } from 'firebase/storage'
+import { getFunctions } from 'firebase/functions'
 
-// ─────────────────────────────────────────────────────────
-// TODO: Replace these values with your Firebase project config
-// Firebase Console → Project Settings → Your apps → Config
-// ─────────────────────────────────────────────────────────
+const REQUIRED_VARS = [
+  'VITE_FIREBASE_API_KEY',
+  'VITE_FIREBASE_AUTH_DOMAIN',
+  'VITE_FIREBASE_PROJECT_ID',
+  'VITE_FIREBASE_STORAGE_BUCKET',
+  'VITE_FIREBASE_MESSAGING_SENDER_ID',
+  'VITE_FIREBASE_APP_ID',
+]
+
+const missing = REQUIRED_VARS.filter(key => !import.meta.env[key])
+if (missing.length > 0) {
+  console.warn(
+    `[Saanvi Marks] Firebase not configured. Missing env vars:\n  ${missing.join('\n  ')}\n` +
+    'Copy .env.example → .env.local and fill in your Firebase project values.'
+  )
+}
+
+export function isFirebaseReady() {
+  return REQUIRED_VARS.every(key => Boolean(import.meta.env[key]))
+}
+
 const firebaseConfig = {
   apiKey:            import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain:        import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
@@ -16,8 +34,9 @@ const firebaseConfig = {
   appId:             import.meta.env.VITE_FIREBASE_APP_ID,
 }
 
-const app     = initializeApp(firebaseConfig)
-export const db      = getFirestore(app)
-export const auth    = getAuth(app)
-export const storage = getStorage(app)
+const app = initializeApp(firebaseConfig)
+export const db        = getFirestore(app)
+export const auth      = getAuth(app)
+export const storage   = getStorage(app)
+export const functions = getFunctions(app, 'asia-south1')
 export default app

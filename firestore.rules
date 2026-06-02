@@ -1,0 +1,54 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Helpers ────────────────────────────────────────────────────────────
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      // Requires the custom claim { admin: true } set on the admin account.
+      // Set it once via Firebase Admin SDK:
+      //   admin.auth().setCustomUserClaims(uid, { admin: true })
+      return isSignedIn() && request.auth.token.admin == true;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    // ── orders ─────────────────────────────────────────────────────────────
+    // - Any authenticated user can create an order (checkout flow)
+    // - Users can read their own orders (matched by userId field)
+    // - Only admin can list all orders or update any order
+    // - Nobody can delete orders
+    match /orders/{orderId} {
+      allow create: if isSignedIn();
+      allow read:   if isAdmin() || (isSignedIn() && resource.data.userId == request.auth.uid);
+      allow update: if isAdmin();
+      allow delete: if false;
+    }
+
+    // ── users ──────────────────────────────────────────────────────────────
+    // - Each user can read and write only their own document
+    // - Admin can read/write any user document
+    match /users/{userId} {
+      allow read, write: if isOwner(userId) || isAdmin();
+    }
+
+    // ── products ───────────────────────────────────────────────────────────
+    // - Anyone (including unauthenticated) can read products
+    // - Only admin can create, update, or delete products
+    match /products/{productId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ── deny everything else ───────────────────────────────────────────────
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

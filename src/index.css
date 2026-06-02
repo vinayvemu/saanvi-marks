@@ -1,64 +1,246 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Comfortaa:wght@300;400;500;600;700&family=Nunito:wght@300;400;500;600;700&family=Noto+Sans+Telugu:wght@400;500&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* ═══════════════════════════════════════════════════════════
+   BASE
+═══════════════════════════════════════════════════════════ */
 @layer base {
   *, *::before, *::after { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: smooth; font-size: 17px; }
+
   body {
-    background-color: #0e0d0c;
+    background-color: #0a0908;
+    background-image:
+      radial-gradient(ellipse at 50% 0%,   rgba(201,139,10,0.07) 0%, transparent 55%),
+      radial-gradient(ellipse at 0%  60%,  rgba(201,139,10,0.03) 0%, transparent 40%),
+      radial-gradient(ellipse at 100% 80%, rgba(201,139,10,0.03) 0%, transparent 40%),
+      repeating-radial-gradient(circle at 50% 50%,
+        transparent 0, transparent 80px,
+        rgba(201,139,10,0.013) 80px, rgba(201,139,10,0.013) 81px);
     color: #faf8f3;
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'Nunito', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
-  ::selection { background: #c98b0a; color: #0e0d0c; }
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: #1a1917; }
-  ::-webkit-scrollbar-thumb { background: #c98b0a; border-radius: 3px; }
+
+  /* Comfortaa for card/section/product titles */
+  h2, h3, h4, h5, h6,
+  .font-serif, .font-display { font-family: 'Comfortaa', cursive; }
+  /* Caveat only for explicit script/handwritten use */
+  .font-script { font-family: 'Caveat', cursive; }
+
+  /* ── Film-grain texture overlay ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 200px 200px;
+  }
+
+  ::selection     { background: #c98b0a; color: #0a0908; }
+  ::-webkit-scrollbar       { width: 4px; }
+  ::-webkit-scrollbar-track { background: #0a0908; }
+  ::-webkit-scrollbar-thumb { background: linear-gradient(to bottom, #c98b0a, #7a5008); border-radius: 2px; }
 }
 
+/* ═══════════════════════════════════════════════════════════
+   COMPONENTS
+═══════════════════════════════════════════════════════════ */
 @layer components {
+
+  /* ── Gold CTA button ── */
   .btn-gold {
-    @apply inline-flex items-center gap-2 px-8 py-3.5 bg-gold-500 text-onyx-950 font-medium tracking-wide
-           hover:bg-gold-400 active:scale-[0.98] transition-all duration-200 text-sm;
+    @apply inline-flex items-center gap-2 px-8 py-3.5 text-onyx-950 font-medium tracking-wide
+           active:scale-[0.98] transition-all duration-300 text-sm relative overflow-hidden;
+    background: linear-gradient(105deg, #a06c06 0%, #e8c460 35%, #c98b0a 55%, #f0d878 75%, #a06c06 100%);
+    background-size: 250% 100%;
+    background-position: 0% 0%;
   }
+  .btn-gold::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.18) 50%, transparent 60%);
+    background-size: 250% 100%;
+    background-position: 200% 0%;
+    transition: background-position 0.6s ease;
+  }
+  .btn-gold:hover {
+    background-position: 100% 0%;
+    box-shadow: 0 0 24px rgba(201, 139, 10, 0.35), 0 0 48px rgba(201, 139, 10, 0.12);
+  }
+  .btn-gold:hover::after { background-position: -50% 0%; }
+
+  /* ── Ghost / outline button ── */
   .btn-outline {
-    @apply inline-flex items-center gap-2 px-8 py-3.5 border border-gold-500 text-gold-400 font-medium
-           tracking-wide hover:bg-gold-500/10 active:scale-[0.98] transition-all duration-200 text-sm;
+    @apply inline-flex items-center gap-2 px-8 py-3.5 border border-gold-600/70 text-gold-400 font-medium
+           tracking-wide active:scale-[0.98] transition-all duration-300 text-sm relative overflow-hidden;
   }
+  .btn-outline::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(105deg, transparent, rgba(201,139,10,0.08), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .btn-outline:hover {
+    @apply border-gold-500 text-gold-300;
+    box-shadow: inset 0 0 20px rgba(201,139,10,0.06), 0 0 16px rgba(201,139,10,0.12);
+  }
+  .btn-outline:hover::before { opacity: 1; }
+
+  /* ── Luxury card ── */
+  .card-luxury {
+    @apply bg-onyx-900 border border-onyx-700/80 transition-all duration-500;
+    background: linear-gradient(145deg, #1a1917 0%, #141210 100%);
+    box-shadow: 0 1px 0 rgba(201,139,10,0.05) inset;
+  }
+  .card-luxury:hover {
+    @apply border-gold-600/40;
+    box-shadow:
+      0 0 0 1px rgba(201,139,10,0.15),
+      0 8px 32px rgba(0,0,0,0.5),
+      0 1px 0 rgba(201,139,10,0.1) inset;
+    transform: translateY(-2px);
+  }
+
+  /* ── Luxury divider ── */
   .luxury-divider {
     @apply flex items-center gap-4 text-gold-600;
   }
   .luxury-divider::before,
   .luxury-divider::after {
     content: '';
-    @apply flex-1 h-px bg-gradient-to-r from-transparent via-gold-600 to-transparent;
+    @apply flex-1 h-px;
+    background: linear-gradient(to right, transparent, rgba(201,139,10,0.5), transparent);
   }
-  .card-luxury {
-    @apply bg-onyx-900 border border-onyx-700 hover:border-gold-600/50 transition-all duration-300;
-  }
+
+  /* ── Form input ── */
   .input-luxury {
-    @apply w-full bg-onyx-800 border border-onyx-600 text-cream placeholder-onyx-400
-           px-4 py-3 text-sm focus:outline-none focus:border-gold-500 transition-colors;
+    @apply w-full border text-cream placeholder-onyx-500
+           px-4 py-3 text-sm focus:outline-none transition-all duration-200;
+    font-family: 'Nunito', system-ui, sans-serif;
+    background: linear-gradient(135deg, #141210 0%, #1a1917 100%);
+    border-color: rgba(70, 66, 59, 0.8);
   }
+  .input-luxury:focus {
+    border-color: rgba(201, 139, 10, 0.6);
+    box-shadow: 0 0 0 3px rgba(201,139,10,0.07), inset 0 1px 0 rgba(201,139,10,0.05);
+  }
+
+  /* ── Gold badge / pill ── */
   .badge-gold {
-    @apply inline-block text-[10px] tracking-luxury uppercase px-3 py-1 border border-gold-600/50
-           text-gold-400 bg-gold-500/5;
+    @apply inline-block text-[10px] tracking-luxury uppercase px-3 py-1 text-gold-400;
+    border: 1px solid rgba(201,139,10,0.35);
+    background: linear-gradient(135deg, rgba(201,139,10,0.08) 0%, rgba(201,139,10,0.03) 100%);
+    letter-spacing: 0.18em;
   }
+
+  /* ── Section heading ── */
   .section-heading {
-    @apply font-serif text-4xl md:text-5xl text-cream leading-tight;
+    font-family: 'Comfortaa', cursive;
+    @apply text-4xl md:text-5xl text-cream leading-tight;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    text-shadow: 0 2px 40px rgba(201,139,10,0.1);
   }
-  .gold-text {
-    @apply text-gold-400;
+
+  /* ── Display heading — Caveat for hero-scale artistic text ── */
+  .display-heading {
+    font-family: 'Caveat', cursive;
+    @apply text-cream leading-[0.95];
+    font-weight: 700;
+    text-shadow: 0 4px 60px rgba(201,139,10,0.12);
+  }
+
+  /* ── Gold line accent ── */
+  .gold-line {
+    @apply block w-12 h-px mx-auto;
+    background: linear-gradient(to right, transparent, #c98b0a, transparent);
+  }
+
+  /* ── Glassmorphism panel ── */
+  .glass-panel {
+    background: linear-gradient(135deg, rgba(26,25,23,0.9) 0%, rgba(14,13,12,0.95) 100%);
+    backdrop-filter: blur(20px) saturate(1.2);
+    border: 1px solid rgba(201,139,10,0.12);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.03);
   }
 }
 
+/* ═══════════════════════════════════════════════════════════
+   SHIMMER & ANIMATIONS
+═══════════════════════════════════════════════════════════ */
 .shimmer-gold {
-  background: linear-gradient(90deg, #c98b0a 0%, #f5dc8a 40%, #e8a81a 60%, #c98b0a 100%);
+  background: linear-gradient(90deg,
+    #8a5c02 0%,
+    #c98b0a 20%,
+    #f5dc8a 45%,
+    #faeea0 55%,
+    #e8a81a 70%,
+    #c98b0a 85%,
+    #8a5c02 100%
+  );
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 4s linear infinite;
+  /* Extra room so italic/handwritten tails don't clip */
+  padding-right: 0.2em;
+  padding-bottom: 0.08em;
+  display: inline-block;
+}
+
+.text-gold-metallic {
+  background: linear-gradient(135deg, #c98b0a 0%, #f0d060 50%, #c98b0a 100%);
   background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: shimmer 3s linear infinite;
 }
+
+.corner-ornament {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+}
+.corner-ornament-tl { top: 12px; left: 12px; border-top: 1px solid rgba(201,139,10,0.5); border-left: 1px solid rgba(201,139,10,0.5); }
+.corner-ornament-tr { top: 12px; right: 12px; border-top: 1px solid rgba(201,139,10,0.5); border-right: 1px solid rgba(201,139,10,0.5); }
+.corner-ornament-bl { bottom: 12px; left: 12px; border-bottom: 1px solid rgba(201,139,10,0.5); border-left: 1px solid rgba(201,139,10,0.5); }
+.corner-ornament-br { bottom: 12px; right: 12px; border-bottom: 1px solid rgba(201,139,10,0.5); border-right: 1px solid rgba(201,139,10,0.5); }
+
+@keyframes shimmer {
+  0%   { background-position: -300% 0; }
+  100% { background-position:  300% 0; }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0);   }
+  50%       { transform: translateY(-8px); }
+}
+@keyframes goldPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(201,139,10,0); }
+  50%       { box-shadow: 0 0 24px 4px rgba(201,139,10,0.2); }
+}
+
+.animate-fade-up    { animation: fadeUp  0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.animate-fade-in    { animation: fadeIn  0.5s ease both; }
+.animate-float      { animation: float   3s ease-in-out infinite; }
+.animate-gold-pulse { animation: goldPulse 2.5s ease-in-out infinite; }

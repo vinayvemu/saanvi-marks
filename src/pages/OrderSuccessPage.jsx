@@ -46,7 +46,7 @@ export default function OrderSuccessPage() {
 
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <a
-            href="https://wa.me/91XXXXXXXXXX"
+            href={`https://wa.me/918686183497?text=${encodeURIComponent("Hi! I just placed an order on Saanvi Marks and have a question about it.")}`}
             target="_blank" rel="noreferrer"
             className="btn-gold"
           >
