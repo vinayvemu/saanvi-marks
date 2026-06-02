@@ -222,11 +222,13 @@ export default function ProductPage() {
   }
 
   const overlayFont = liveEngraving?.font
-    ? (fontOptions.find(f => f.id === liveEngraving.font.id) ?? liveEngraving.font)
+    ? (fontOptions.find(f => f.id === (liveEngraving.font.id ?? liveEngraving.font)) ?? liveEngraving.font)
     : null
 
+  const previewEnabled = import.meta.env.VITE_ENGRAVING_PREVIEW === 'true'
+
   const activeSrc    = product.images?.[0]
-  const showControls = view === 'engraved' && liveEngraving && overlay
+  const showControls = previewEnabled && view === 'engraved' && liveEngraving && overlay
 
   return (
     <>
@@ -293,7 +295,7 @@ export default function ProductPage() {
                 }} />
 
               {/* ── ENGRAVING OVERLAY — draggable + native-rotate ── */}
-              {view === 'engraved' && liveEngraving && overlay && (
+              {previewEnabled && view === 'engraved' && liveEngraving && overlay && (
                 <div
                   onMouseDown={handleMouseDown}
                   onTouchStart={handleTouchStart}
@@ -310,7 +312,7 @@ export default function ProductPage() {
                   }}
                 >
                   {/* Text engraving */}
-                  {liveEngraving.type === 'text' && liveEngraving.text && (
+                  {liveEngraving.text && (
                     <>
                       <p style={{
                         ...overlayFont?.style,
@@ -346,7 +348,7 @@ export default function ProductPage() {
                   )}
 
                   {/* Image engraving */}
-                  {liveEngraving.type === 'image' && liveEngraving.imageUrl && (
+                  {liveEngraving.imageUrl && (
                     <img
                       src={liveEngraving.imageUrl}
                       alt="Engraving preview"
@@ -407,7 +409,7 @@ export default function ProductPage() {
               )}
 
               {/* "Live Preview" badge */}
-              {view === 'engraved' && liveEngraving && (
+              {previewEnabled && view === 'engraved' && liveEngraving && (
                 <div className="absolute bottom-3 left-3 flex items-center gap-2">
                   <span className="badge-gold text-[9px] animate-gold-pulse">✦ Live Preview</span>
                   <span className="text-[9px] text-onyx-500 tracking-wide">drag · rotate handle · plain view above</span>
@@ -415,7 +417,7 @@ export default function ProductPage() {
               )}
 
               {/* Empty state hint */}
-              {view === 'engraved' && !liveEngraving && (
+              {previewEnabled && view === 'engraved' && !liveEngraving && (
                 <div className="absolute bottom-3 inset-x-0 flex justify-center pointer-events-none">
                   <span className="text-[10px] tracking-[0.18em] text-onyx-600 uppercase">
                     Type below to see your engraving
@@ -430,7 +432,7 @@ export default function ProductPage() {
             </div>
 
             {/* ── SIZE + BORDER RADIUS CONTROLS — only when engraving active ── */}
-            {showControls && (
+            {previewEnabled && showControls && (
               <div
                 className="space-y-2.5 px-4 py-3"
                 style={{ background: 'rgba(20,18,16,0.9)', border: '1px solid rgba(70,66,59,0.5)', borderRadius: '8px' }}
@@ -458,7 +460,7 @@ export default function ProductPage() {
                 </div>
 
                 {/* Border radius row — image engraving only */}
-                {liveEngraving?.type === 'image' && (
+                {liveEngraving?.imageUrl && (
                   <div className="flex items-center gap-3">
                     {/* Rounded rect icon */}
                     <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="rgba(201,139,10,0.8)" strokeWidth="2.5" className="shrink-0">
@@ -481,8 +483,8 @@ export default function ProductPage() {
               </div>
             )}
 
-            {/* ── VIEW TOGGLE ─────────────────────────── */}
-            <div className="grid grid-cols-2 gap-2">
+            {/* ── VIEW TOGGLE — only shown when preview is enabled ── */}
+            {previewEnabled && <div className="grid grid-cols-2 gap-2">
               <button
                 onClick={() => setView('engraved')}
                 className={`flex items-center justify-center gap-2 py-2.5 text-xs tracking-wide transition-all duration-200
@@ -510,7 +512,7 @@ export default function ProductPage() {
                 <ImageIcon size={13} />
                 Plain Product
               </button>
-            </div>
+            </div>}
 
             {/* Trust strip */}
             <div className="grid grid-cols-3 gap-2">

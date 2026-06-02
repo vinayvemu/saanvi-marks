@@ -1,10 +1,9 @@
 import { useState, useRef, useEffect } from 'react'
-import { Upload, Type, Image as ImageIcon, RotateCcw, Check, Smile } from 'lucide-react'
+import { Upload, Type, Image as ImageIcon, RotateCcw, Check, Smile, X } from 'lucide-react'
 import { fontOptions } from '../../data/products'
 
 const QUICK_EMOJIS = ['❤️','✨','⭐','💫','🌟','🔥','♾️','🙏','👑','💍','🕉️','☮️','🦋','🌸','🎯','💛','🌺','🫶']
 
-// Inject Google Font <link> tags once per font
 function useGoogleFonts() {
   useEffect(() => {
     fontOptions.forEach(f => {
@@ -21,7 +20,6 @@ function useGoogleFonts() {
 }
 
 export default function EngravingCustomiser({ product, onAddToCart, onEngravingChange }) {
-  const [tab,        setTab]        = useState('text')
   const [engText,    setEngText]    = useState('')
   const [engLine2,   setEngLine2]   = useState('')
   const [font,       setFont]       = useState(fontOptions[0])
@@ -29,8 +27,8 @@ export default function EngravingCustomiser({ product, onAddToCart, onEngravingC
   const [quantity,   setQuantity]   = useState(1)
   const [added,      setAdded]      = useState(false)
   const [showEmoji,  setShowEmoji]  = useState(false)
-  const [emojiTarget, setEmojiTarget] = useState('line1') // which line to insert into
-  const fileRef = useRef()
+  const [emojiTarget, setEmojiTarget] = useState('line1')
+  const fileRef  = useRef()
   const line1Ref = useRef()
   const line2Ref = useRef()
 
@@ -39,23 +37,28 @@ export default function EngravingCustomiser({ product, onAddToCart, onEngravingC
   const canText  = product.engravingOptions.text
   const canImage = product.engravingOptions.image
 
+  // Build combined engraving object — can have text + image simultaneously
+  const buildEngraving = (text, line2, f, imageUrl) => {
+    const hasText  = text.trim().length > 0
+    const hasImage = !!imageUrl
+    if (!hasText && !hasImage) return null
+    return {
+      ...(hasText  ? { text: text.trim(), line2: line2.trim(), font: f } : {}),
+      ...(hasImage ? { imageUrl } : {}),
+    }
+  }
+
   useEffect(() => {
     if (!onEngravingChange) return
-    if (tab === 'text') {
-      onEngravingChange(engText.trim() ? { type: 'text', text: engText, line2: engLine2, font } : null)
-    } else {
-      onEngravingChange(imgPreview ? { type: 'image', imageUrl: imgPreview } : null)
-    }
-  }, [tab, engText, engLine2, font, imgPreview]) // eslint-disable-line
+    onEngravingChange(buildEngraving(engText, engLine2, font, imgPreview))
+  }, [engText, engLine2, font, imgPreview]) // eslint-disable-line
 
   const insertEmoji = (emoji) => {
     if (emojiTarget === 'line1') {
-      const next = (engText + emoji).slice(0, canText.maxChars)
-      setEngText(next)
+      setEngText(prev => (prev + emoji).slice(0, canText.maxChars))
       setTimeout(() => line1Ref.current?.focus(), 0)
     } else {
-      const next = (engLine2 + emoji).slice(0, canText.maxChars)
-      setEngLine2(next)
+      setEngLine2(prev => (prev + emoji).slice(0, canText.maxChars))
       setTimeout(() => line2Ref.current?.focus(), 0)
     }
   }
@@ -75,37 +78,31 @@ export default function EngravingCustomiser({ product, onAddToCart, onEngravingC
   }
 
   const handleAdd = () => {
-    const engraving = tab === 'text'
-      ? { type: 'text', text: engText, line2: engLine2, font: font.id }
-      : { type: 'image', imageUrl: imgPreview }
-    onAddToCart(engraving, quantity)
+    const engraving = buildEngraving(engText, engLine2, font, imgPreview)
+    // Flatten font to just id for storage
+    const stored = engraving ? { ...engraving, ...(engraving.font ? { font: engraving.font.id } : {}) } : null
+    onAddToCart(stored, quantity)
     setAdded(true)
     setTimeout(() => setAdded(false), 2500)
   }
 
-  const isValid = tab === 'text' ? engText.trim().length > 0 : !!imgPreview
+  const isValid     = engText.trim().length > 0 || !!imgPreview
   const previewText = engText.trim() || 'Your Text'
 
   return (
     <div className="space-y-6">
 
-      {/* ── MODE TABS ─────────────────────────────────── */}
-      {canImage && (
-        <div className="flex" style={{ border: '1px solid rgba(70,66,59,0.6)' }}>
-          {[{ id: 'text', icon: Type, label: 'Text Engraving' }, { id: 'image', icon: ImageIcon, label: 'Image / Logo' }].map(({ id, icon: Icon, label }) => (
-            <button key={id} onClick={() => setTab(id)}
-              className={`flex-1 flex items-center justify-center gap-2 py-3 text-sm transition-all duration-200
-                ${tab === id ? 'text-gold-400 border-b-2 border-gold-500' : 'text-onyx-400 hover:text-cream'}`}
-              style={tab === id ? { background: 'rgba(201,139,10,0.07)' } : {}}>
-              <Icon size={13} /> {label}
-            </button>
-          ))}
-        </div>
-      )}
-
-      {/* ── TEXT TAB ──────────────────────────────────── */}
-      {tab === 'text' && canText && (
+      {/* ── TEXT SECTION ──────────────────────────────── */}
+      {canText && (
         <div className="space-y-5">
+
+          {/* Section header — only shown when image is also available */}
+          {canImage && (
+            <div className="flex items-center gap-2">
+              <Type size={13} className="text-gold-500" />
+              <span className="text-xs text-onyx-400 uppercase tracking-wide">Text Engraving</span>
+            </div>
+          )}
 
           {/* Line 1 */}
           <div>
@@ -130,6 +127,7 @@ export default function EngravingCustomiser({ product, onAddToCart, onEngravingC
             <div>
               <label className="block text-xs text-onyx-400 mb-1.5">
                 Line 2 <span className="text-onyx-600">(optional)</span>
+                <span className="float-right text-onyx-600 font-mono">{engLine2.length}/{canText.maxChars}</span>
               </label>
               <input
                 ref={line2Ref}
@@ -161,7 +159,6 @@ export default function EngravingCustomiser({ product, onAddToCart, onEngravingC
                     key={e}
                     onClick={() => insertEmoji(e)}
                     className="text-lg w-9 h-9 flex items-center justify-center hover:bg-gold-500/10 rounded transition-colors"
-                    title={`Insert ${e}`}
                   >
                     {e}
                   </button>
@@ -184,23 +181,18 @@ export default function EngravingCustomiser({ product, onAddToCart, onEngravingC
                   onClick={() => setFont(f)}
                   className="py-3 px-3 text-left transition-all duration-200 space-y-1"
                   style={{
-                    border: `1px solid ${font.id === f.id ? 'rgba(201,139,10,0.6)' : 'rgba(70,66,59,0.5)'}`,
+                    border:     `1px solid ${font.id === f.id ? 'rgba(201,139,10,0.6)' : 'rgba(70,66,59,0.5)'}`,
                     background: font.id === f.id ? 'rgba(201,139,10,0.07)' : 'rgba(14,12,10,0.4)',
                   }}
                 >
-                  {/* Font name in its own style */}
                   <p className="text-[11px] text-onyx-500 mb-1" style={{ fontFamily: '"Nunito", sans-serif' }}>
                     {f.label}
                   </p>
-                  {/* Live preview in the font */}
-                  <p
-                    className="truncate leading-tight"
-                    style={{
-                      ...f.style,
-                      fontSize: '15px',
-                      color: font.id === f.id ? '#e8a81a' : '#d0cdc8',
-                    }}
-                  >
+                  <p className="truncate leading-tight" style={{
+                    ...f.style,
+                    fontSize: '15px',
+                    color: font.id === f.id ? '#e8a81a' : '#d0cdc8',
+                  }}>
                     {previewText}
                   </p>
                 </button>
@@ -210,27 +202,49 @@ export default function EngravingCustomiser({ product, onAddToCart, onEngravingC
         </div>
       )}
 
-      {/* ── IMAGE TAB ─────────────────────────────────── */}
-      {tab === 'image' && (
-        <div>
+      {/* ── IMAGE / LOGO SECTION ──────────────────────── */}
+      {canImage && (
+        <div className="space-y-3">
+
+          {/* Divider + header */}
+          <div className="flex items-center gap-3 pt-2" style={{ borderTop: canText ? '1px solid rgba(70,66,59,0.4)' : 'none' }}>
+            <ImageIcon size={13} className="text-gold-500 flex-shrink-0" />
+            <span className="text-xs text-onyx-400 uppercase tracking-wide">Image / Logo</span>
+            <span className="text-[10px] text-onyx-600">(optional)</span>
+          </div>
+
           <input ref={fileRef} type="file" accept="image/png,image/svg+xml,image/jpeg" className="hidden" onChange={handleImageUpload} />
-          <button
-            onClick={() => fileRef.current.click()}
-            className="w-full py-8 flex flex-col items-center gap-3 transition-all duration-200 group"
-            style={{ border: '1px dashed rgba(70,66,59,0.7)' }}
-            onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(201,139,10,0.5)'}
-            onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(70,66,59,0.7)'}
-          >
-            <Upload size={22} className="text-onyx-500 group-hover:text-gold-400 transition-colors" />
-            <div className="text-center">
-              <p className="text-sm text-onyx-300 group-hover:text-cream transition-colors">Upload logo or image</p>
-              <p className="text-[11px] text-onyx-600 mt-1">PNG, SVG, JPG — max 5MB</p>
+
+          {imgPreview ? (
+            <div className="flex items-center gap-3 p-3"
+              style={{ background: 'rgba(201,139,10,0.05)', border: '1px solid rgba(201,139,10,0.2)' }}>
+              <img src={imgPreview} alt="Uploaded" className="w-12 h-12 object-contain rounded" />
+              <div className="flex-1 min-w-0">
+                <p className="text-xs text-gold-400 flex items-center gap-1"><Check size={11} /> Image uploaded</p>
+                <p className="text-[10px] text-onyx-500 mt-0.5">Will be engraved alongside your text</p>
+              </div>
+              <button
+                onClick={() => setImgPreview(null)}
+                className="text-onyx-500 hover:text-red-400 transition-colors"
+                title="Remove image"
+              >
+                <X size={14} />
+              </button>
             </div>
-          </button>
-          {imgPreview && (
-            <p className="text-xs text-gold-500 mt-2 text-center flex items-center justify-center gap-1.5">
-              <Check size={11} /> Image uploaded — preview shown on product
-            </p>
+          ) : (
+            <button
+              onClick={() => fileRef.current.click()}
+              className="w-full py-6 flex flex-col items-center gap-2 transition-all duration-200 group"
+              style={{ border: '1px dashed rgba(70,66,59,0.7)' }}
+              onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(201,139,10,0.5)'}
+              onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(70,66,59,0.7)'}
+            >
+              <Upload size={18} className="text-onyx-500 group-hover:text-gold-400 transition-colors" />
+              <div className="text-center">
+                <p className="text-sm text-onyx-300 group-hover:text-cream transition-colors">Upload logo or image</p>
+                <p className="text-[11px] text-onyx-600 mt-0.5">PNG, SVG, JPG — max 5 MB</p>
+              </div>
+            </button>
           )}
         </div>
       )}
