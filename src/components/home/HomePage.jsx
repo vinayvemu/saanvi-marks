@@ -28,7 +28,7 @@ const OCCASIONS = [
   {
     title: "Corporate Gifting",
     symbol: "⬡",
-    desc: "Branded pens, tumblers, award plaques. GST invoice. Trusted by Sri City companies.",
+    desc: "Branded pens, tumblers, award plaques. GST invoice. Bulk orders from 10 pieces.",
     accent: "Bulk quotes in 2 hrs",
     tag: "GST invoice",
     href: "/products?category=corporate",
@@ -236,9 +236,9 @@ export default function HomePage() {
               style={{ animationDelay: "0.4s" }}
             >
               {[
-                { value: "2,400+", label: "Orders Delivered" },
-                { value: "1,800+", label: "Happy Customers" },
-                { value: "38+", label: "Cities Shipped" },
+                { value: "150+", label: "Orders Delivered" },
+                { value: "80+",  label: "Happy Customers" },
+                { value: "5+",   label: "Cities Shipped" },
               ].map((stat, i) => (
                 <div key={stat.label} className="flex items-stretch">
                   <div className="text-center px-8 md:px-12">

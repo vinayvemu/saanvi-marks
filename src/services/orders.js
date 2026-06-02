@@ -4,7 +4,9 @@ import {
 import { httpsCallable } from 'firebase/functions'
 import { db, functions } from '../lib/firebase'
 
-const getOrderHistory = httpsCallable(functions, 'getOrderHistory')
+const getOrderHistory   = httpsCallable(functions, 'getOrderHistory')
+const getAllOrdersFn     = httpsCallable(functions, 'getAllOrders')
+const updateOrderStatusFn = httpsCallable(functions, 'updateOrderStatus')
 
 export async function createOrder({ userId, customer, shipping, gstNumber, gift, items, pricing, paymentMethod }) {
   const ref = await addDoc(collection(db, 'orders'), {
@@ -39,4 +41,13 @@ export async function failOrderPayment(orderId, { code, description }) {
 export async function getUserOrders() {
   const { data } = await getOrderHistory()
   return data
+}
+
+export async function getAllOrders() {
+  const { data } = await getAllOrdersFn()
+  return data
+}
+
+export async function updateOrderStatus(orderId, status) {
+  await updateOrderStatusFn({ orderId, status })
 }

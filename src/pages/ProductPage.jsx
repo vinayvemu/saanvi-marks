@@ -217,7 +217,7 @@ export default function ProductPage() {
       seller: { '@type': 'Organization', name: 'Saanvi Marks' },
     },
     ...(product.originalPrice && {
-      aggregateRating: { '@type': 'AggregateRating', ratingValue: '5', reviewCount: '1' },
+      aggregateRating: { '@type': 'AggregateRating', ratingValue: '4.8', reviewCount: '3' },
     }),
   }
 

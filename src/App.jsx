@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
+import { useEffect } from 'react'
 import { AuthProvider }    from './context/AuthContext'
 import { CartProvider }    from './context/CartContext'
 import Navbar              from './components/layout/Navbar'
@@ -13,9 +14,18 @@ import OrderSuccessPage    from './pages/OrderSuccessPage'
 import AuthPage            from './pages/AuthPage'
 import AccountPage         from './pages/AccountPage'
 import AdminProductsPage   from './pages/admin/AdminProductsPage'
+import AdminOrdersPage     from './pages/admin/AdminOrdersPage'
 import CorporatePage       from './pages/CorporatePage'
 import WeddingPage         from './pages/WeddingPage'
 import WalkInPage          from './pages/WalkInPage'
+import AboutPage           from './pages/AboutPage'
+import ContactPage         from './pages/ContactPage'
+
+function ScrollToTop() {
+  const { pathname } = useLocation()
+  useEffect(() => { window.scrollTo(0, 0) }, [pathname])
+  return null
+}
 
 function Layout({ children }) {
   return (
@@ -44,6 +54,7 @@ function ComingSoon({ title }) {
 export default function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <AuthProvider>
         <CartProvider>
           <Layout>
@@ -62,11 +73,14 @@ export default function App() {
               <Route path="/admin/products" element={
                 <ProtectedRoute><AdminProductsPage /></ProtectedRoute>
               } />
+              <Route path="/admin/orders" element={
+                <ProtectedRoute><AdminOrdersPage /></ProtectedRoute>
+              } />
               <Route path="/corporate" element={<CorporatePage />} />
               <Route path="/wedding"   element={<WeddingPage />} />
               <Route path="/walk-in"   element={<WalkInPage />} />
-              <Route path="/about"     element={<ComingSoon title="Our Story" />} />
-              <Route path="/contact"   element={<ComingSoon title="Contact Us" />} />
+              <Route path="/about"     element={<AboutPage />} />
+              <Route path="/contact"   element={<ContactPage />} />
               <Route path="*"          element={<ComingSoon title="Page Not Found" />} />
             </Routes>
           </Layout>

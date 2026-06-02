@@ -47,7 +47,7 @@ export default function CorporatePage() {
     <>
     <SEO
       title="Corporate Gifting — Laser Engraved Branded Gifts"
-      description="Branded pens, tumblers and award plaques with precision laser engraving. GST invoice. Bulk orders from 10 pieces. Trusted by Sri City and IIT Tirupati. Ships pan-India."
+      description="Branded pens, tumblers and award plaques with precision laser engraving. GST invoice. Bulk orders from 10 pieces. Ships pan-India."
       keywords="corporate gifting Tirupati, branded pens laser engraved, bulk corporate gifts India, engraved tumblers office, award plaques companies, GST invoice gifts"
       url="https://saanvimarks.in/corporate"
     />
@@ -101,7 +101,7 @@ export default function CorporatePage() {
           {/* Stats */}
           <div className="grid grid-cols-2 gap-4">
             {[
-              { value: '500+',    label: 'Corporate Orders',    sub: 'Delivered this year'         },
+              { value: '5+',      label: 'Corporate Orders',    sub: 'Delivered this year'         },
               { value: '2 hrs',   label: 'Quote Turnaround',    sub: 'WhatsApp us for pricing'     },
               { value: '10 pcs',  label: 'Minimum Order',       sub: 'No massive MOQs'             },
               { value: '100%',    label: 'GST Invoiced',        sub: 'Claim input tax credit'      },
@@ -280,15 +280,19 @@ export default function CorporatePage() {
         </div>
       </section>
 
-      {/* ══ TRUSTED BY ═════════════════════════════════════════════ */}
+      {/* ══ GROWING FAST ════════════════════════════════════════════ */}
       <section className="py-16" style={{ borderTop: '1px solid rgba(201,139,10,0.07)' }}>
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <p className="text-[10px] text-onyx-600 tracking-[0.3em] uppercase mb-8">Trusted by teams at</p>
-          <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-4">
-            {['Sri City', 'IIT Tirupati', 'SVIMS Hospital', 'Tirupati Collectorate', 'Local Startups'].map(name => (
-              <span key={name} className="text-onyx-600 text-sm tracking-wide">{name}</span>
-            ))}
-          </div>
+        <div className="max-w-3xl mx-auto px-6 text-center">
+          <span className="badge-gold mb-5 inline-block">Just Getting Started</span>
+          <h3 className="section-heading text-2xl mb-4">Tirupati's Newest Precision Studio — and Word Is Spreading Fast</h3>
+          <p className="text-cream/60 text-sm leading-relaxed" style={{ fontFamily: '"Nunito", sans-serif' }}>
+            We're a young studio with a big obsession — making every engraving exactly right. No shortcuts, no mediocre batches.
+            Corporate clients across Tirupati are already discovering what happens when you mix laser precision with genuine care.
+            Your team could be next.
+          </p>
+          <p className="text-gold-600 text-xs mt-5 tracking-wide" style={{ fontFamily: '"Nunito", sans-serif' }}>
+            First bulk order? We'll engrave a free sample so you can feel the quality before committing.
+          </p>
         </div>
       </section>
 
